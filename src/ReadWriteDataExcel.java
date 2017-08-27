@@ -20,6 +20,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ReadWriteDataExcel {
 	static Boolean check = false;
+	
+	//Change column number whatever you want to take data
+	public static int columnNumForFirst = 3;
+	public static int columnNumForSecond = 5;
 
 	public static void main(String args[]) throws IOException {
 
@@ -35,20 +39,20 @@ public class ReadWriteDataExcel {
 			FileInputStream file2 = new FileInputStream(new File(
 					"D://WorldCity.xlsx"));
 
-			// Get the workbook instance for XLS file
+			// Get the workbook instance for XLSX file
 			XSSFWorkbook workbook1 = new XSSFWorkbook(file1);
 			XSSFWorkbook workbook2 = new XSSFWorkbook(file2);
 
-			// Get first sheet from the workbook
+			// Get only first sheet from the workbook
 			XSSFSheet sheet1 = workbook1.getSheetAt(0);
 			XSSFSheet sheet2 = workbook2.getSheetAt(0);
 
-			// Compare sheets
-
+			
 			// Get iterator to all the rows in current sheet1
 			Iterator<Row> rowIterator1 = sheet1.iterator();
 			Iterator<Row> rowIterator2 = sheet2.iterator();
-
+			
+			//getting date from first excel file
 			while (rowIterator1.hasNext()) {
 				Row row = rowIterator1.next();
 				// For each row, iterate through all the columns
@@ -59,7 +63,7 @@ public class ReadWriteDataExcel {
 					Cell cell = cellIterator.next();
 
 					// This is for read only one column from excel
-					if (cell.getColumnIndex() == 1) {
+					if (cell.getColumnIndex() == columnNumForFirst) {
 						// Check the cell type and format accordingly
 						switch (cell.getCellType()) {
 						case Cell.CELL_TYPE_NUMERIC:
@@ -98,7 +102,7 @@ public class ReadWriteDataExcel {
 					// Check the cell type and format accordingly
 
 					// This is for read only one column from excel
-					if (cell1.getColumnIndex() == 1) {
+					if (cell1.getColumnIndex() == columnNumForSecond) {
 						switch (cell1.getCellType()) {
 						case Cell.CELL_TYPE_NUMERIC:
 							arr2.add(cell1.getNumericCellValue());
@@ -133,7 +137,8 @@ public class ReadWriteDataExcel {
 				}
 			}
 			System.out.println("\narr3 list values, here arr1 has some values which arr2 DOES NOT have : " + arr3);
-			writeStudentsListToExcel(arr3);
+			writeResultDataToExcel(arr3);
+			StoreArraysToHashMap(arr1, arr2);
 
 			// closing the files
 			file1.close();
@@ -149,11 +154,11 @@ public class ReadWriteDataExcel {
 
 	// write into new file excel
 
-	private static void writeStudentsListToExcel(ArrayList arr3) {
+	private static void writeResultDataToExcel(ArrayList arr3) {
 
-		FileOutputStream fos = null;
+		FileOutputStream resultExcel = null;
 		try {
-			fos = new FileOutputStream(
+			resultExcel = new FileOutputStream(
 					"D://ResultFile.xlsx");
 
 			XSSFWorkbook workBook = new XSSFWorkbook();
@@ -176,7 +181,7 @@ public class ReadWriteDataExcel {
 				// System.out.print(cell.getCellStyle());
 				cell.setCellValue(arr3.get(i2).toString().trim());
 			}
-			workBook.write(fos);
+			workBook.write(resultExcel);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -192,17 +197,18 @@ public class ReadWriteDataExcel {
 	//Store data to HashMap
 	private static void StoreArraysToHashMap(ArrayList arr1, ArrayList arr2) {
 
-		HashMap hashMap1 = new HashMap();
-
+		HashMap<Integer, String> hashMap1 = new HashMap<Integer, String>();
 		for(int i = 0; i < arr1.size(); i++) {
 			hashMap1.put(i, arr1.get(i).toString());
 		}
 
-		HashMap hashMap2 = new HashMap();
+		HashMap<Integer, String> hashMap2 = new HashMap<Integer, String>();
 		for(int j = 0; j < arr1.size(); j++) {
-			hashMap1.put(j, arr1.get(j).toString());
+			hashMap2.put(j, arr2.get(j).toString());
 		}
 		
+		System.out.println("\nHashMap from first excel file: " + hashMap1);
+		System.out.println("\nHashMap from second excel file: " + hashMap2);
 		
 	}
 }
