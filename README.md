@@ -1,8 +1,9 @@
 # Compare-two-excel-files
 
 First of all, you need to import apache poi library in order to read and wrtie excel file:
-Downloading apache poi :
-Potential exceptions first time: 
+Downloading apache poi : https://poi.apache.org/download.html
+
+Potential exceptions in first time: 
 1. java.lang.ClassNotFoundException: org.apache.xmlbeans.XmlException
 Solution, you need to add one more library which is xmlbeans-x.x.x.jar: https://stackoverflow.com/questions/23080945/java-lang-classnotfoundexception-org-apache-xmlbeans-xmlexception
 
